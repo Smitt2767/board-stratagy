@@ -12,8 +12,6 @@ const Board = () => {
   const { rows, cards } = useSelector((state) => state.board);
   const dispatch = useDispatch();
 
-  console.log(Object.keys(cards).length);
-
   const handleDragEnd = (result) => {
     const { draggableId, destination, source } = result;
 
