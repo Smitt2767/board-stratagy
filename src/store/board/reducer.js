@@ -1,7 +1,9 @@
+import { colors } from "../../constants";
 import { Card, Row } from "../../utils/board";
 import {
   ADD_NEW_ROW,
   ADD_SELECTED_CARD,
+  DELETE_CARD,
   MERGE_CARDS,
   REMOVE_SELECTED_CARD,
   SET_CARD_DATA,
@@ -170,6 +172,23 @@ const boardReducer = (state = initialState, action) => {
             description,
             color,
             hasData: true,
+          },
+        },
+      };
+    }
+    case DELETE_CARD: {
+      const { cardId } = payload;
+
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          [cardId]: {
+            ...state.cards[cardId],
+            title: "",
+            description: "",
+            color: colors[0],
+            hasData: false,
           },
         },
       };

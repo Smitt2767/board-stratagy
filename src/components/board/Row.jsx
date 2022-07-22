@@ -20,7 +20,7 @@ const Row = ({ cardIds, id }) => {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-2 relative">
+    <div className="grid grid-cols-12 gap-2">
       {cardIds.map((cardId) => (
         <Card {...cards[cardId]} key={cardId} rowId={id} />
       ))}

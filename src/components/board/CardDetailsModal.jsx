@@ -6,6 +6,8 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 import DropDown from "../common/DropDown";
 import { modes } from "../../constants";
 import AddEditCardModal from "./AddEditCardModal";
+import { useDispatch } from "react-redux";
+import { deleteCard } from "../../store/actions";
 
 const Container = motion(styled.div`
   background-color: ${({ color }) => color};
@@ -18,10 +20,11 @@ const initialModalState = {
   cardId: "",
 };
 
-const CardDetailsDropDown = ({ cardId }) => {
+const CardDetailsDropDown = ({ cardId, onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const [modalData, setModalData] = useState({ ...initialModalState });
+
+  const dispatch = useDispatch();
 
   const toggle = () => {
     setIsOpen((prev) => !prev);
@@ -40,6 +43,15 @@ const CardDetailsDropDown = ({ cardId }) => {
     });
   };
 
+  const handleDelete = () => {
+    dispatch(
+      deleteCard({
+        cardId,
+      })
+    );
+    onClose();
+  };
+
   return (
     <>
       <AddEditCardModal
@@ -54,7 +66,7 @@ const CardDetailsDropDown = ({ cardId }) => {
           </DropDown.Toggle>
           <DropDown.Menu>
             <DropDown.Item onClick={handleEdit}>Edit</DropDown.Item>
-            <DropDown.Item>Delete</DropDown.Item>
+            <DropDown.Item onClick={handleDelete}>Delete</DropDown.Item>
           </DropDown.Menu>
         </DropDown>
       </div>
@@ -84,9 +96,9 @@ const CardDetailsModal = ({ cardId, isOpen, onClose }) => {
             <Container
               layoutId={cardId}
               color={card.color}
-              className={`max-w-lg w-full mx-auto rounded-lg z-10 shadow-lg shadow-black/5 p-4`}
+              className={`max-w-lg w-full mx-auto rounded-lg z-10 shadow-lg shadow-black/5 p-4 relative`}
             >
-              {/* <CardDetailsDropDown cardId={cardId} /> */}
+              <CardDetailsDropDown cardId={cardId} onClose={onClose} />
               <div className="h-40 flex items-center justify-center flex-col border-b-[0.5px] border-gray-white border-opacity-50">
                 <motion.p
                   layoutId={`heading_${cardId}`}

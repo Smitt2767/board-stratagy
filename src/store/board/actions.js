@@ -1,6 +1,7 @@
 import {
   ADD_NEW_ROW,
   ADD_SELECTED_CARD,
+  DELETE_CARD,
   MERGE_CARDS,
   REMOVE_SELECTED_CARD,
   SET_CARD_DATA,
@@ -26,5 +27,10 @@ export const mergeCards = () => ({
 
 export const setCardData = (data) => ({
   type: SET_CARD_DATA,
+  payload: data,
+});
+
+export const deleteCard = (data) => ({
+  type: DELETE_CARD,
   payload: data,
 });

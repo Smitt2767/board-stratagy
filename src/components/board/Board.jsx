@@ -6,7 +6,7 @@ const Board = () => {
   const { rows } = useSelector((state) => state.board);
 
   return (
-    <div className="flex flex-col mb-5 gap-2">
+    <div className="flex flex-col mb-5 gap-2 relative">
       {[...Object.keys(rows)].map((id) => (
         <Row {...rows[id]} key={id} />
       ))}
