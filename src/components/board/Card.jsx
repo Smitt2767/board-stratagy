@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { useState } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -46,7 +47,16 @@ const CardContainer = motion(styled.div`
 `);
 
 // Draggable
-const Card = ({ id, hasData, colSpan, rowId, title, description, color }) => {
+const Card = ({
+  id,
+  hasData,
+  colSpan,
+  rowId,
+  title,
+  description,
+  color,
+  index,
+}) => {
   const { selectedCards } = useSelector((state) => state.board);
   const selectedCardsArr = Object.values(selectedCards);
   const isSelected = selectedCardsArr.includes(id);
@@ -120,48 +130,69 @@ const Card = ({ id, hasData, colSpan, rowId, title, description, color }) => {
 
   return (
     <>
-      {hasData ? (
-        <>
-          <CardDetailsModal
-            {...cardDetailsModalData}
-            onClose={handleDetailsModalClose}
-          />
-          <CardContainer
-            className={`${sizes[colSpan]} flex items-center justify-center flex-col cursor-pointer rounded-[3px] px-1 overflow-hidden`}
-            color={color}
-            layoutId={id}
-            onClick={handleClick}
-          >
-            <motion.p layoutId={`heading_${id}`} className="text-lg truncate">
-              {title}
-            </motion.p>
-            {!!description && (
-              <motion.p
-                layoutId={`description_${id}`}
-                className="text-sm truncate"
+      <CardDetailsModal
+        {...cardDetailsModalData}
+        onClose={handleDetailsModalClose}
+      />
+      <AddEditCardModal
+        mode={modes.ADD}
+        {...modalData}
+        onClose={handleModalClose}
+      />
+      <Draggable draggableId={id} index={index} isDragDisabled={!hasData}>
+        {(provided, snapshot) =>
+          hasData ? (
+            <div
+              className={`${sizes[colSpan]} `}
+              {...provided.dragHandleProps}
+              {...provided.draggableProps}
+              ref={provided.innerRef}
+            >
+              <CardContainer
+                className="h-16 mx-[3px] flex items-center justify-center flex-col cursor-pointer rounded-[3px] px-1 overflow-hidden"
+                color={color}
+                onClick={handleClick}
+                {...(snapshot.isDragging || snapshot.isDropAnimating
+                  ? {}
+                  : { layoutId: id })}
               >
-                {description}
-              </motion.p>
-            )}
-          </CardContainer>
-        </>
-      ) : (
-        <>
-          <AddEditCardModal
-            mode={modes.ADD}
-            {...modalData}
-            onClose={handleModalClose}
-          />
-          <div
-            className={`border-2 border-dashed h-16 flex items-center justify-center rounded-[3px] cursor-pointer hover:border-white hover:text-white transition-all duration-500 ${
-              sizes[colSpan]
-            } ${isSelected ? "border-white text-white" : "border-gray-600"}`}
-            onClick={handleAddBtnClick}
-          >
-            <AiOutlinePlus />
-          </div>
-        </>
-      )}
+                <motion.p
+                  {...(snapshot.isDragging
+                    ? {}
+                    : { layoutId: `heading_${id}` })}
+                  className={`${
+                    !!description ? "text-sm" : "text-lg"
+                  } truncate`}
+                >
+                  {title}
+                </motion.p>
+                {!!description && (
+                  <motion.p
+                    {...(snapshot.isDragging
+                      ? {}
+                      : { layoutId: `description_${id}` })}
+                    className="text-[10px] truncate text-gray-100"
+                  >
+                    {description}
+                  </motion.p>
+                )}
+              </CardContainer>
+            </div>
+          ) : (
+            <div
+              {...provided.dragHandleProps}
+              {...provided.draggableProps}
+              ref={provided.innerRef}
+              className={`border-2 mx-[3px] border-dashed h-16 flex items-center justify-center rounded-[3px] cursor-pointer hover:border-white transition-colors duration-500 hover:text-white ${
+                sizes[colSpan]
+              } ${isSelected ? "border-white text-white" : "border-gray-600"}`}
+              onClick={handleAddBtnClick}
+            >
+              <AiOutlinePlus />
+            </div>
+          )
+        }
+      </Draggable>
     </>
   );
 };

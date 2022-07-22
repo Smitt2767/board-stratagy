@@ -4,6 +4,7 @@ import Card from "./Card";
 import { RiMergeCellsHorizontal } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { mergeCards } from "../../store/actions";
+import { Droppable } from "react-beautiful-dnd";
 
 // Droppable
 const Row = ({ cardIds, id }) => {
@@ -20,20 +21,28 @@ const Row = ({ cardIds, id }) => {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-2">
-      {cardIds.map((cardId) => (
-        <Card {...cards[cardId]} key={cardId} rowId={id} />
-      ))}
-
-      <button
-        className={`absolute -right-8 bg-white text-black text-lg p-0.5 transition-all duration-500 ${
-          isAllowedToMerge ? "scale-100 opacity-100" : "scale-50 opacity-0"
-        }`}
-        onClick={handleMergeCards}
-      >
-        <RiMergeCellsHorizontal />
-      </button>
-    </div>
+    <Droppable droppableId={id} type="column" direction="horizontal">
+      {(provided) => (
+        <div
+          className="grid grid-cols-12 h-16 overflow-hidden my-[3px]"
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
+          {cardIds.map((cardId, index) => (
+            <Card {...cards[cardId]} key={cardId} rowId={id} index={index} />
+          ))}
+          {provided.placeholder}
+          <button
+            className={`absolute -right-6 bg-gray-200 hover:bg-white text-black text-lg p-0.5 transition-all duration-500 rounded-sm ${
+              isAllowedToMerge ? "scale-100 opacity-100" : "scale-50 opacity-0"
+            }`}
+            onClick={handleMergeCards}
+          >
+            <RiMergeCellsHorizontal />
+          </button>
+        </div>
+      )}
+    </Droppable>
   );
 };
 

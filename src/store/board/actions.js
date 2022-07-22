@@ -4,6 +4,8 @@ import {
   DELETE_CARD,
   MERGE_CARDS,
   REMOVE_SELECTED_CARD,
+  REORDER_CARDS_BETWEEN_ROWS,
+  REORDER_CARDS_WITHIN_ROW,
   SET_CARD_DATA,
 } from "./actionTypes";
 
@@ -32,5 +34,15 @@ export const setCardData = (data) => ({
 
 export const deleteCard = (data) => ({
   type: DELETE_CARD,
+  payload: data,
+});
+
+export const reOrderCardsWithinRow = (data) => ({
+  type: REORDER_CARDS_WITHIN_ROW,
+  payload: data,
+});
+
+export const reOrderCardsBetweenRows = (data) => ({
+  type: REORDER_CARDS_BETWEEN_ROWS,
   payload: data,
 });

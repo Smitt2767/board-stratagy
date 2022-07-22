@@ -1,4 +1,4 @@
-import { colors } from "../../constants";
+import { cards, colors, rows } from "../../constants";
 import { Card, Row } from "../../utils/board";
 import {
   ADD_NEW_ROW,
@@ -6,14 +6,16 @@ import {
   DELETE_CARD,
   MERGE_CARDS,
   REMOVE_SELECTED_CARD,
+  REORDER_CARDS_BETWEEN_ROWS,
+  REORDER_CARDS_WITHIN_ROW,
   SET_CARD_DATA,
 } from "./actionTypes";
 
 const initialState = {
   selectedRowId: "",
   selectedCards: {},
-  cards: {},
-  rows: {},
+  cards: { ...cards },
+  rows: { ...rows },
 };
 
 const boardReducer = (state = initialState, action) => {
@@ -128,11 +130,6 @@ const boardReducer = (state = initialState, action) => {
         return a + state.cards[b].colSpan;
       }, 0);
 
-      // keep only first cardId and remove all other cardId from the array
-      newCardIds = newCardIds.filter(
-        (_, index) => index <= firstCardIndex || index > lastCardIndex
-      );
-
       // change colSpan of first card
       const newCards = {
         ...state.cards,
@@ -141,6 +138,18 @@ const boardReducer = (state = initialState, action) => {
           colSpan,
         },
       };
+
+      // keep only first cardId and remove all other cardId from the array
+      const tempCardIds = [];
+      newCardIds.forEach((cardId, index) => {
+        if (index <= firstCardIndex || index > lastCardIndex) {
+          tempCardIds.push(cardId);
+        } else {
+          delete newCards[cardId];
+        }
+      });
+
+      newCardIds = [...tempCardIds];
 
       // update rows data
       const newRows = {
@@ -193,6 +202,37 @@ const boardReducer = (state = initialState, action) => {
         },
       };
     }
+    case REORDER_CARDS_WITHIN_ROW: {
+      const { rowId, cardIds } = payload;
+      return {
+        ...state,
+        rows: {
+          ...state.rows,
+          [rowId]: {
+            ...state.rows[rowId],
+            cardIds,
+          },
+        },
+      };
+    }
+    case REORDER_CARDS_BETWEEN_ROWS: {
+      const { start, end } = payload;
+      return {
+        ...state,
+        rows: {
+          ...state.rows,
+          [start.rowId]: {
+            ...state.rows[start.rowId],
+            cardIds: start.cardIds,
+          },
+          [end.rowId]: {
+            ...state.rows[end.rowId],
+            cardIds: end.cardIds,
+          },
+        },
+      };
+    }
+
     default:
       return state;
   }
