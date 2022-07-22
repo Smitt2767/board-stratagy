@@ -1,0 +1,5 @@
+export const ADD_NEW_ROW = "ADD_NEW_ROW";
+export const ADD_SELECTED_CARD = "ADD_SELECTED_CARD";
+export const REMOVE_SELECTED_CARD = "REMOVE_SELECTED_CARD";
+export const MERGE_CARDS = "MERGE_CARDS";
+export const SET_CARD_DATA = "SET_CARD_DATA";
