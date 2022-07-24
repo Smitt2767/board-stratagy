@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch } from "react-redux";
@@ -163,7 +163,6 @@ const Card = ({
   const { selectedCards } = useSelector((state) => state.board);
   const selectedCardsArr = Object.values(selectedCards);
   const isSelected = selectedCardsArr.includes(id);
-  const ref = useRef();
 
   const [modalData, setModalData] = useState({ ...initialModalState });
 
@@ -173,7 +172,9 @@ const Card = ({
 
   const dispatch = useDispatch();
 
-  const contextMenuData = useContextMenu(ref);
+  const contextId = `card_${id.replace(/[-]/g, "_")}`;
+
+  const contextMenuData = useContextMenu(contextId);
 
   const add = () => {
     dispatch(
@@ -256,61 +257,56 @@ const Card = ({
         {...modalData}
         onClose={handleModalClose}
       />
+
       <Draggable draggableId={id} index={index} isDragDisabled={!hasData}>
         {(provided, snapshot) => (
-          <div ref={ref} className={`${sizes[colSpan]} `}>
+          <div
+            className={`${sizes[colSpan]} `}
+            {...provided.dragHandleProps}
+            {...provided.draggableProps}
+            ref={provided.innerRef}
+            id={contextId}
+          >
             {hasData ? (
-              <div
-                {...provided.dragHandleProps}
-                {...provided.draggableProps}
-                ref={provided.innerRef}
+              <CardContainer
+                className="h-16 mx-[3px] flex items-center justify-center flex-col rounded-[3px] px-1 overflow-hidden"
+                color={color}
+                onClick={handleClick}
+                {...(snapshot.isDragging || snapshot.isDropAnimating
+                  ? {}
+                  : { layoutId: id })}
               >
-                <CardContainer
-                  className="h-16 mx-[3px] flex items-center justify-center flex-col cursor-pointer rounded-[3px] px-1 overflow-hidden"
-                  color={color}
-                  onClick={handleClick}
-                  {...(snapshot.isDragging || snapshot.isDropAnimating
+                <motion.p
+                  {...(snapshot.isDragging
                     ? {}
-                    : { layoutId: id })}
+                    : { layoutId: `heading_${id}` })}
+                  className={`${
+                    !!description ? "text-sm" : "text-lg"
+                  } truncate`}
                 >
+                  {title}
+                </motion.p>
+                {!!description && (
                   <motion.p
                     {...(snapshot.isDragging
                       ? {}
-                      : { layoutId: `heading_${id}` })}
-                    className={`${
-                      !!description ? "text-sm" : "text-lg"
-                    } truncate`}
+                      : { layoutId: `description_${id}` })}
+                    className="text-[10px] truncate text-gray-100"
                   >
-                    {title}
+                    {description}
                   </motion.p>
-                  {!!description && (
-                    <motion.p
-                      {...(snapshot.isDragging
-                        ? {}
-                        : { layoutId: `description_${id}` })}
-                      className="text-[10px] truncate text-gray-100"
-                    >
-                      {description}
-                    </motion.p>
-                  )}
-                </CardContainer>
-              </div>
+                )}
+              </CardContainer>
             ) : (
               <div
-                {...provided.dragHandleProps}
-                {...provided.draggableProps}
-                ref={provided.innerRef}
+                className={`border-2 mx-[3px] border-dashed h-16 flex items-center justify-center rounded-[3px] cursor-pointer hover:border-white transition-colors duration-500 hover:text-white ${
+                  sizes[colSpan]
+                } ${
+                  isSelected ? "border-white text-white" : "border-gray-600"
+                }`}
+                onClick={handleAddBtnClick}
               >
-                <div
-                  className={`border-2 mx-[3px] border-dashed h-16 flex items-center justify-center rounded-[3px] cursor-pointer hover:border-white transition-colors duration-500 hover:text-white ${
-                    sizes[colSpan]
-                  } ${
-                    isSelected ? "border-white text-white" : "border-gray-600"
-                  }`}
-                  onClick={handleAddBtnClick}
-                >
-                  <AiOutlinePlus />
-                </div>
+                <AiOutlinePlus />
               </div>
             )}
           </div>
