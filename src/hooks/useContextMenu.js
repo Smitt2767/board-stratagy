@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-const useContextMenu = (id) => {
+const useContextMenu = (ref) => {
   const [x, setX] = useState("0px");
   const [y, setY] = useState("0px");
   const [showMenu, setShowMenu] = useState(false);
@@ -20,13 +20,13 @@ const useContextMenu = (id) => {
   }, [showMenu]);
 
   useEffect(() => {
-    const selector = document.querySelector(`#${id}`) || document;
+    const selector = ref.current || document;
 
     selector.addEventListener("contextmenu", handleContextMenu);
     return () => {
       selector.removeEventListener("contextmenu", handleContextMenu);
     };
-  }, [handleContextMenu, id]);
+  }, [handleContextMenu, ref]);
 
   return { x, y, show: showMenu, closeMenu: handleClick };
 };

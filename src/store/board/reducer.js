@@ -5,10 +5,13 @@ import {
   ADD_SELECTED_CARD,
   DELETE_CARD,
   MERGE_CARDS,
+  PASTE_CARD,
   REMOVE_SELECTED_CARD,
   REORDER_CARDS_BETWEEN_ROWS,
   REORDER_CARDS_WITHIN_ROW,
+  SEPARATE_CARD,
   SET_CARD_DATA,
+  SET_COPY_CARD_ID,
 } from "./actionTypes";
 
 const initialState = {
@@ -16,6 +19,7 @@ const initialState = {
   selectedCards: {},
   cards: { ...cards },
   rows: { ...rows },
+  copyCardId: "",
 };
 
 const boardReducer = (state = initialState, action) => {
@@ -233,6 +237,65 @@ const boardReducer = (state = initialState, action) => {
       };
     }
 
+    case SET_COPY_CARD_ID: {
+      return {
+        ...state,
+        copyCardId: payload,
+      };
+    }
+    case PASTE_CARD: {
+      const copiedCard = state.cards[state.copyCardId];
+      const pasteCard = {
+        ...state.cards[payload],
+        hasData: true,
+        title: copiedCard.title,
+        description: copiedCard.description,
+        color: copiedCard.color,
+      };
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          [payload]: pasteCard,
+        },
+      };
+    }
+    case SEPARATE_CARD: {
+      const { rowId, cardId } = payload;
+      const newCardIds = [...state.rows[rowId].cardIds];
+      const card = state.cards[cardId];
+      const colSpan = card.colSpan;
+      const indexOfCard = newCardIds.indexOf(cardId);
+
+      const newAddCards = [...Array(colSpan - 1).keys()].map(() => new Card());
+      const newCards = {
+        ...state.cards,
+        [cardId]: {
+          ...state.cards[cardId],
+          colSpan: 1,
+        },
+      };
+      newAddCards.forEach((card) => {
+        newCards[card.id] = card;
+      });
+      newCardIds.splice(
+        indexOfCard + 1,
+        0,
+        ...newAddCards.map((card) => card.id)
+      );
+
+      return {
+        ...state,
+        cards: newCards,
+        rows: {
+          ...state.rows,
+          [rowId]: {
+            ...state.rows[rowId],
+            cardIds: newCardIds,
+          },
+        },
+      };
+    }
     default:
       return state;
   }

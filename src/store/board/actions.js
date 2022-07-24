@@ -3,10 +3,13 @@ import {
   ADD_SELECTED_CARD,
   DELETE_CARD,
   MERGE_CARDS,
+  PASTE_CARD,
   REMOVE_SELECTED_CARD,
   REORDER_CARDS_BETWEEN_ROWS,
   REORDER_CARDS_WITHIN_ROW,
+  SEPARATE_CARD,
   SET_CARD_DATA,
+  SET_COPY_CARD_ID,
 } from "./actionTypes";
 
 export const addNewRow = () => ({
@@ -44,5 +47,20 @@ export const reOrderCardsWithinRow = (data) => ({
 
 export const reOrderCardsBetweenRows = (data) => ({
   type: REORDER_CARDS_BETWEEN_ROWS,
+  payload: data,
+});
+
+export const setCopyCardId = (data) => ({
+  type: SET_COPY_CARD_ID,
+  payload: data,
+});
+
+export const pasteCard = (data) => ({
+  type: PASTE_CARD,
+  payload: data,
+});
+
+export const separateCard = (data) => ({
+  type: SEPARATE_CARD,
   payload: data,
 });

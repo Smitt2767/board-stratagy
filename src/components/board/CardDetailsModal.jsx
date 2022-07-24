@@ -7,7 +7,7 @@ import DropDown from "../common/DropDown";
 import { modes } from "../../constants";
 import AddEditCardModal from "./AddEditCardModal";
 import { useDispatch } from "react-redux";
-import { deleteCard } from "../../store/actions";
+import { deleteCard, setCopyCardId } from "../../store/actions";
 
 const Container = motion(styled.div`
   background-color: ${({ color }) => color};
@@ -51,6 +51,10 @@ const CardDetailsDropDown = ({ cardId, onClose }) => {
     );
     onClose();
   };
+  const handleCopy = () => {
+    dispatch(setCopyCardId(cardId));
+    onClose();
+  };
 
   return (
     <>
@@ -67,6 +71,7 @@ const CardDetailsDropDown = ({ cardId, onClose }) => {
           <DropDown.Menu>
             <DropDown.Item onClick={handleEdit}>Edit</DropDown.Item>
             <DropDown.Item onClick={handleDelete}>Delete</DropDown.Item>
+            <DropDown.Item onClick={handleCopy}>Copy</DropDown.Item>
           </DropDown.Menu>
         </DropDown>
       </div>
