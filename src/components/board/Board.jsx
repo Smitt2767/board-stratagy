@@ -49,15 +49,27 @@ const Board = () => {
       const newStartCardIds = [...start.cardIds],
         newEndCardIds = [...end.cardIds];
 
+      let removeTotalCardsLength = 0;
+      let totalColSpan = 0;
+
+      for (let i = destination.index; i < newEndCardIds.length; i++) {
+        const total = totalColSpan + cards[newEndCardIds[i]].colSpan;
+        if (totalColSpan === cardColSpan) break;
+        else if (total <= cardColSpan) {
+          totalColSpan = total;
+          removeTotalCardsLength++;  
+        } else {
+          break;
+        }
+      }
+
+      if (totalColSpan !== cardColSpan) return;
+
       const removedIds = newEndCardIds.splice(
         destination.index,
-        cardColSpan,
+        removeTotalCardsLength,
         draggableId
       );
-
-      const removedFirstCard = cards[removedIds[0]];
-
-      if (removedFirstCard.colSpan !== cardColSpan) return;
 
       newStartCardIds.splice(source.index, 1, ...removedIds);
 
