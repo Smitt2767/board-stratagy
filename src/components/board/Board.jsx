@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
+  clear,
   reOrderCardsBetweenRows,
   reOrderCardsWithinRow,
 } from "../../store/actions";
@@ -26,6 +27,7 @@ const Container = styled.div`
 
 const Board = () => {
   const { rows, cards } = useSelector((state) => state.board);
+
   const dispatch = useDispatch();
 
   const handleDragEnd = (result) => {
@@ -106,8 +108,20 @@ const Board = () => {
 
   const rowsLength = Object.keys(rows).length;
 
+  const handleClear = () => {
+    dispatch(clear());
+  };
+
   return (
     <Container className="mb-5 w-full overflow-x-auto relative pb-1 pt-5">
+      <div className="flex justify-end">
+        <button
+          onClick={handleClear}
+          className="px-4 py-2 text-gray-500 text-sm inline-block transition-all duration-500 uppercase font-medium hover:text-gray-50"
+        >
+          Clear
+        </button>
+      </div>
       <div className={rowsLength ? "" : ""}>
         <DragDropContext onDragEnd={handleDragEnd}>
           {[...Object.keys(rows)].map((id) => (

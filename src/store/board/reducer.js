@@ -3,6 +3,7 @@ import { Card, Row } from "../../utils/board";
 import {
   ADD_NEW_ROW,
   ADD_SELECTED_CARD,
+  CLEAR,
   DELETE_CARD,
   MERGE_CARDS,
   PASTE_CARD,
@@ -247,7 +248,6 @@ const boardReducer = (state = initialState, action) => {
         },
       };
     }
-
     case SET_COPY_CARD_ID: {
       return {
         ...state,
@@ -318,6 +318,14 @@ const boardReducer = (state = initialState, action) => {
         },
       };
     }
+    case CLEAR:
+      return {
+        selectedRowId: "",
+        selectedCards: {},
+        cards: {},
+        rows: {},
+        copyCardId: "",
+      };
     default:
       return state;
   }

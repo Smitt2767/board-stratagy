@@ -1,6 +1,7 @@
 import {
   ADD_NEW_ROW,
   ADD_SELECTED_CARD,
+  CLEAR,
   DELETE_CARD,
   MERGE_CARDS,
   PASTE_CARD,
@@ -15,7 +16,6 @@ import {
 export const addNewRow = () => ({
   type: ADD_NEW_ROW,
 });
-
 
 export const addSelectedCard = (data) => ({
   type: ADD_SELECTED_CARD,
@@ -64,4 +64,8 @@ export const pasteCard = (data) => ({
 export const separateCard = (data) => ({
   type: SEPARATE_CARD,
   payload: data,
+});
+
+export const clear = () => ({
+  type: CLEAR,
 });

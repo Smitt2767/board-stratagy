@@ -9,3 +9,4 @@ export const REORDER_CARDS_BETWEEN_ROWS = "REORDER_CARDS_BETWEEN_ROWS";
 export const SET_COPY_CARD_ID = "SET_COPY_CARD_ID";
 export const PASTE_CARD = "PASTE_CARD";
 export const SEPARATE_CARD = "SEPARATE_CARD";
+export const CLEAR = "CLEAR";
