@@ -78,6 +78,7 @@ const AddEditCardModal = ({ isOpen, onClose, cardId, mode }) => {
             value={values.description}
             onChange={handleChange}
             placeholder="Enter Text"
+            rows={5}
             className="bg-gray-600 w-full outline-none border-[0.5px] border-gray-500 px-3 py-1 rounded-md mb-3"
           ></textarea>
           <div className="bg-gray-600 rounded-md border-[0.5px] border-gray-500 p-3 w-[70%]">

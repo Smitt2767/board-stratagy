@@ -282,7 +282,7 @@ const Card = ({
                     : { layoutId: `heading_${id}` })}
                   className={`${
                     !!description ? "text-sm" : "text-lg"
-                  } truncate`}
+                  } truncate w-full text-center`}
                 >
                   {title}
                 </motion.p>
@@ -291,7 +291,7 @@ const Card = ({
                     {...(snapshot.isDragging
                       ? {}
                       : { layoutId: `description_${id}` })}
-                    className="text-[10px] truncate text-gray-100"
+                    className="text-[10px] text-center   truncate w-full text-gray-100"
                   >
                     {description}
                   </motion.p>

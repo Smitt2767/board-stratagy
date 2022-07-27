@@ -16,6 +16,7 @@ export const addNewRow = () => ({
   type: ADD_NEW_ROW,
 });
 
+
 export const addSelectedCard = (data) => ({
   type: ADD_SELECTED_CARD,
   payload: data,

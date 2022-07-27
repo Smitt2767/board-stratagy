@@ -79,6 +79,13 @@ const CardDetailsDropDown = ({ cardId, onClose }) => {
   );
 };
 
+const LineClamped = motion(styled.p`
+  display: -webkit-box;
+  -webkit-line-clamp: ${({ clamp = 3 }) => clamp};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`);
+
 const CardDetailsModal = ({ cardId, isOpen, onClose }) => {
   const { cards } = useSelector((state) => state.board);
 
@@ -95,7 +102,7 @@ const CardDetailsModal = ({ cardId, isOpen, onClose }) => {
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 flex items-center justify-center close bg-black/40"
+            className="fixed inset-0 flex items-center justify-center close bg-black/40 overflow-hidden"
             onClick={handleOutsideClick}
           >
             <Container
@@ -105,19 +112,17 @@ const CardDetailsModal = ({ cardId, isOpen, onClose }) => {
             >
               <CardDetailsDropDown cardId={cardId} onClose={onClose} />
               <div className="h-40 flex items-center justify-center flex-col border-b-[0.5px] border-gray-white border-opacity-50">
-                <motion.p
+                <LineClamped
+                  clamp={1}
                   layoutId={`heading_${cardId}`}
-                  className="text-4xl truncate"
+                  className="text-4xl mb-2"
                 >
                   {card.title}
-                </motion.p>
+                </LineClamped>
                 {!!card.description && (
-                  <motion.p
-                    layoutId={`description_${cardId}`}
-                    className="text-xl"
-                  >
+                  <LineClamped layoutId={`description_${cardId}`} clamp={3}>
                     {card.description}
-                  </motion.p>
+                  </LineClamped>
                 )}
               </div>
 
