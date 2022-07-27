@@ -10,6 +10,7 @@ import useContextMenu from "../../hooks/useContextMenu";
 import {
   addSelectedCard,
   deleteCard,
+  mergeCards,
   pasteCard,
   removeSelectedCard,
   separateCard,
@@ -120,8 +121,20 @@ const CardContextMenu = ({ x, y, show, closeMenu, id }) => {
 };
 
 const AddCardContextMenu = ({ x, y, show, closeMenu, colSpan, id, rowId }) => {
-  const { copyCardId } = useSelector((state) => state.board);
+  const { copyCardId, selectedCards, selectedRowId } = useSelector(
+    (state) => state.board
+  );
+
+  const cardIds = Object.values(selectedCards);
+  const isAllowedToMerge = selectedRowId === rowId && cardIds.length > 1;
+  const isCardSelected = cardIds.includes(id);
+
   const dispatch = useDispatch();
+
+  const handleMerge = () => {
+    dispatch(mergeCards());
+    closeMenu();
+  };
 
   const handlePaste = () => {
     dispatch(pasteCard(id));
@@ -140,6 +153,9 @@ const AddCardContextMenu = ({ x, y, show, closeMenu, colSpan, id, rowId }) => {
 
   return (
     <ContextMenu x={x} y={y} show={show} onClose={closeMenu}>
+      {isCardSelected && isAllowedToMerge && (
+        <ContextMenu.Item onClick={handleMerge}>Merge</ContextMenu.Item>
+      )}
       {colSpan > 1 && (
         <ContextMenu.Item onClick={handleSeparate}>Separate</ContextMenu.Item>
       )}
@@ -309,6 +325,15 @@ const Card = ({
                 <AiOutlinePlus />
               </div>
             )}
+
+            {/* {lastSelectedCardId === id && isAllowedToMerge && (
+              <button
+                className={`absolute -right-6 bg-gray-200 hover:bg-white text-black text-lg p-0.5 transition-all duration-500 rounded-sm scale-100 opacity-100`}
+                onClick={handleMergeCards}
+              >
+                <RiMergeCellsHorizontal />
+              </button>
+            )} */}
           </div>
         )}
       </Draggable>

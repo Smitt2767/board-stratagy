@@ -107,8 +107,8 @@ const Board = () => {
   const rowsLength = Object.keys(rows).length;
 
   return (
-    <Container className="mb-5 w-full overflow-x-auto relative pb-2">
-      <div className={rowsLength ? "w-[1500px]" : ""}>
+    <Container className="mb-5 w-full overflow-x-auto relative pb-1 pt-5">
+      <div className={rowsLength ? "" : ""}>
         <DragDropContext onDragEnd={handleDragEnd}>
           {[...Object.keys(rows)].map((id) => (
             <Row {...rows[id]} key={id} />
