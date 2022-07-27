@@ -179,6 +179,8 @@ const Card = ({
   const { selectedCards } = useSelector((state) => state.board);
   const selectedCardsArr = Object.values(selectedCards);
   const isSelected = selectedCardsArr.includes(id);
+  const isFirst = selectedCardsArr[0] === id;
+  const isLast = selectedCardsArr[selectedCardsArr.length - 1] === id;
 
   const [modalData, setModalData] = useState({ ...initialModalState });
 
@@ -230,7 +232,9 @@ const Card = ({
       if (!selectedCardsArr.length) add();
       else {
         if (!isSelected) add();
-        else remove();
+        else {
+          (isFirst || isLast) && remove();
+        }
       }
     } else {
       handleAddEditCard();

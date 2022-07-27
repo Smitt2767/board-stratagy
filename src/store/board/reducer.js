@@ -174,9 +174,17 @@ const boardReducer = (state = initialState, action) => {
     }
     case SET_CARD_DATA: {
       const { id, title, description, color } = payload;
+      let newSelectedCardIds = {
+        ...state.selectedCards,
+      };
+      const cardIds = Object.keys(newSelectedCardIds);
+      if (cardIds.some((key) => newSelectedCardIds[key] === id)) {
+        newSelectedCardIds = {};
+      }
 
       return {
         ...state,
+        selectedCards: newSelectedCardIds,
         cards: {
           ...state.cards,
           [id]: {
