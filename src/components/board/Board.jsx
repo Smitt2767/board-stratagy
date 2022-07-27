@@ -13,18 +13,12 @@ const Container = styled.div`
   ::-webkit-scrollbar {
     height: 5px;
   }
-
-  /* Track */
   ::-webkit-scrollbar-track {
     background: rgba(75, 85, 99, 0.397);
   }
-
-  /* Handle */
   ::-webkit-scrollbar-thumb {
     background: rgb(75, 85, 99);
   }
-
-  /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: rgb(66, 80, 99);
   }

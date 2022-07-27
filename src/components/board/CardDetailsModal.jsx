@@ -115,12 +115,16 @@ const CardDetailsModal = ({ cardId, isOpen, onClose }) => {
                 <LineClamped
                   clamp={1}
                   layoutId={`heading_${cardId}`}
-                  className="text-4xl mb-2"
+                  className="text-4xl mb-2 text-center w-full"
                 >
                   {card.title}
                 </LineClamped>
                 {!!card.description && (
-                  <LineClamped layoutId={`description_${cardId}`} clamp={3}>
+                  <LineClamped
+                    layoutId={`description_${cardId}`}
+                    clamp={3}
+                    className="w-full"
+                  >
                     {card.description}
                   </LineClamped>
                 )}
