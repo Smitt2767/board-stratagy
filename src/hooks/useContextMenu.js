@@ -8,8 +8,8 @@ const useContextMenu = (id) => {
   const handleContextMenu = useCallback(
     (e) => {
       e.preventDefault();
-      setX(`${e.pageX}px`);
-      setY(`${e.pageY}px`);
+      setX(`${e.x}px`);
+      setY(`${e.y}px`);
       setShowMenu(true);
     },
     [setX, setY]
