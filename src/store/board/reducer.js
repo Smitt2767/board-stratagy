@@ -174,17 +174,19 @@ const boardReducer = (state = initialState, action) => {
     }
     case SET_CARD_DATA: {
       const { id, title, description, color } = payload;
-      let newSelectedCardIds = {
+
+      let newSelectedCards = {
         ...state.selectedCards,
       };
-      const cardIds = Object.keys(newSelectedCardIds);
-      if (cardIds.some((key) => newSelectedCardIds[key] === id)) {
-        newSelectedCardIds = {};
+
+      const selectedCardValues = Object.values(state.selectedCards);
+      if (selectedCardValues.includes(id)) {
+        newSelectedCards = {};
       }
 
       return {
         ...state,
-        selectedCards: newSelectedCardIds,
+        selectedCards: newSelectedCards,
         cards: {
           ...state.cards,
           [id]: {
@@ -202,6 +204,7 @@ const boardReducer = (state = initialState, action) => {
 
       return {
         ...state,
+        copyCardId: cardId === state.copyCardId ? "" : state.copyCardId,
         cards: {
           ...state.cards,
           [cardId]: {
@@ -260,8 +263,19 @@ const boardReducer = (state = initialState, action) => {
         description: copiedCard.description,
         color: copiedCard.color,
       };
+
+      let newSelectedCards = {
+        ...state.selectedCards,
+      };
+
+      const selectedCardValues = Object.values(state.selectedCards);
+      if (selectedCardValues.includes(payload)) {
+        newSelectedCards = {};
+      }
+
       return {
         ...state,
+        selectedCards: newSelectedCards,
         cards: {
           ...state.cards,
           [payload]: pasteCard,
