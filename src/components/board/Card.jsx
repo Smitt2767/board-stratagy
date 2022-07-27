@@ -261,7 +261,7 @@ const Card = ({
       <Draggable draggableId={id} index={index} isDragDisabled={!hasData}>
         {(provided, snapshot) => (
           <div
-            className={`${sizes[colSpan]} `}
+            className={`${sizes[colSpan]} h-16 mx-[3px] min-w-[24px]`}
             {...provided.dragHandleProps}
             {...provided.draggableProps}
             ref={provided.innerRef}
@@ -269,7 +269,7 @@ const Card = ({
           >
             {hasData ? (
               <CardContainer
-                className="h-16 mx-[3px] flex items-center justify-center flex-col rounded-[3px] px-1 overflow-hidden"
+                className="h-full w-full  flex items-center justify-center flex-col rounded-[3px] px-1 overflow-hidden"
                 color={color}
                 onClick={handleClick}
                 {...(snapshot.isDragging || snapshot.isDropAnimating
@@ -299,7 +299,7 @@ const Card = ({
               </CardContainer>
             ) : (
               <div
-                className={`border-2 mx-[3px] border-dashed h-16 flex items-center justify-center rounded-[3px] cursor-pointer hover:border-white transition-colors duration-500 hover:text-white ${
+                className={`h-full w-full border-2  border-dashed flex items-center justify-center rounded-[3px] cursor-pointer hover:border-white transition-colors duration-500 hover:text-white ${
                   sizes[colSpan]
                 } ${
                   isSelected ? "border-white text-white" : "border-gray-600"

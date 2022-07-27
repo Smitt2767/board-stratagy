@@ -2,11 +2,33 @@ import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import {
   reOrderCardsBetweenRows,
   reOrderCardsWithinRow,
 } from "../../store/actions";
 import Row from "./Row";
+
+const Container = styled.div`
+  ::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgba(75, 85, 99, 0.397);
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(75, 85, 99);
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(66, 80, 99);
+  }
+`;
 
 const Board = () => {
   const { rows, cards } = useSelector((state) => state.board);
@@ -57,7 +79,7 @@ const Board = () => {
         if (totalColSpan === cardColSpan) break;
         else if (total <= cardColSpan) {
           totalColSpan = total;
-          removeTotalCardsLength++;  
+          removeTotalCardsLength++;
         } else {
           break;
         }
@@ -88,14 +110,18 @@ const Board = () => {
     }
   };
 
+  const rowsLength = Object.keys(rows).length;
+
   return (
-    <div className="flex flex-col mb-5 relative">
-      <DragDropContext onDragEnd={handleDragEnd}>
-        {[...Object.keys(rows)].map((id) => (
-          <Row {...rows[id]} key={id} />
-        ))}
-      </DragDropContext>
-    </div>
+    <Container className="mb-5 w-full overflow-x-auto relative pb-2">
+      <div className={rowsLength ? "w-[1500px]" : ""}>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          {[...Object.keys(rows)].map((id) => (
+            <Row {...rows[id]} key={id} />
+          ))}
+        </DragDropContext>
+      </div>
+    </Container>
   );
 };
 
