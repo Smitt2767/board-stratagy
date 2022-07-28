@@ -240,7 +240,7 @@ const Card = ({
     const key = keys[getOS()];
 
     if (key && e[key]) {
-      dispatch(setSelectCard(id));
+      dispatch(setSelectCard(isCardSelected ? "" : id));
     } else
       setCardDetailsModalData({
         cardId: id,

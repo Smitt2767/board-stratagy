@@ -304,6 +304,7 @@ const boardReducer = (state = initialState, action) => {
       const indexOfCard = newCardIds.indexOf(cardId);
 
       const newAddCards = [...Array(colSpan - 1).keys()].map(() => new Card());
+
       const newCards = {
         ...state.cards,
         [cardId]: {
@@ -311,9 +312,11 @@ const boardReducer = (state = initialState, action) => {
           colSpan: 1,
         },
       };
+
       newAddCards.forEach((card) => {
         newCards[card.id] = card;
       });
+
       newCardIds.splice(
         indexOfCard + 1,
         0,
@@ -349,15 +352,23 @@ const boardReducer = (state = initialState, action) => {
       return {
         ...state,
         copyCardId: state.selectedCardId,
+        selectedCardId: "",
       };
     }
     case PASTE: {
-      if (!state.selectedCardId || !state.copyCardId) return state;
+      if (!state.copyCardId) return state;
+
+      const selectedCards = Object.values(state.selectedCards);
+      if (!state.selectedCardId && selectedCards.length !== 1) return state;
+
+      const selectedCardId = state.selectedCardId
+        ? state.selectedCardId
+        : selectedCards[0];
 
       const { newSelectedCards, pasteCard } = getPastCardData(
         state,
         state.copyCardId,
-        state.selectedCardId
+        selectedCardId
       );
 
       return {
@@ -366,7 +377,7 @@ const boardReducer = (state = initialState, action) => {
         selectedCardId: "",
         cards: {
           ...state.cards,
-          [state.selectedCardId]: pasteCard,
+          [selectedCardId]: pasteCard,
         },
       };
     }
