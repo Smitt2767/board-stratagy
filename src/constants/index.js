@@ -12,6 +12,19 @@ export const colors = [
   "#80d0dd ",
   "#f27b9e",
 ];
+export const OS = {
+  MAC: "Mac OS",
+  IOS: "iOS",
+  WINDOWS: "Windows",
+  ANDROID: "Android",
+  LINUX: "Linux",
+};
+
+export const keys = {
+  [OS.WINDOWS]: "ctrlKey",
+  [OS.LINUX]: "ctrlKey",
+  [OS.MAC]: "metaKey",
+};
 
 export const rows = {
   "e0b2c56d-a20a-40a6-971d-8a60c2c14387": {

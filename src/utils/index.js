@@ -1,10 +1,4 @@
-export const OS = {
-  MAC: "Mac OS",
-  IOS: "iOS",
-  WINDOWS: "Windows",
-  ANDROID: "Android",
-  LINUX: "Linux",
-};
+import { OS } from "../constants";
 
 export const getOS = () => {
   if (navigator.userAgent.indexOf("Win") !== -1) return OS.WINDOWS;

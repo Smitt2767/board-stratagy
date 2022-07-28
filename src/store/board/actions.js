@@ -2,12 +2,15 @@ import {
   ADD_NEW_ROW,
   ADD_SELECTED_CARD,
   CLEAR,
+  COPY,
   DELETE_CARD,
   MERGE_CARDS,
+  PASTE,
   PASTE_CARD,
   REMOVE_SELECTED_CARD,
   REORDER_CARDS_BETWEEN_ROWS,
   REORDER_CARDS_WITHIN_ROW,
+  SELECT_CARD,
   SEPARATE_CARD,
   SET_CARD_DATA,
   SET_COPY_CARD_ID,
@@ -68,4 +71,17 @@ export const separateCard = (data) => ({
 
 export const clear = () => ({
   type: CLEAR,
+});
+
+export const setSelectCard = (data) => ({
+  type: SELECT_CARD,
+  payload: data,
+});
+
+export const copy = () => ({
+  type: COPY,
+});
+
+export const paste = () => ({
+  type: PASTE,
 });

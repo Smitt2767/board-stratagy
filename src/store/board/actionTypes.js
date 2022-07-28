@@ -10,3 +10,6 @@ export const SET_COPY_CARD_ID = "SET_COPY_CARD_ID";
 export const PASTE_CARD = "PASTE_CARD";
 export const SEPARATE_CARD = "SEPARATE_CARD";
 export const CLEAR = "CLEAR";
+export const SELECT_CARD = "SELECT_CARD";
+export const COPY = "COPY";
+export const PASTE = "PASTE";

@@ -4,12 +4,15 @@ import {
   ADD_NEW_ROW,
   ADD_SELECTED_CARD,
   CLEAR,
+  COPY,
   DELETE_CARD,
   MERGE_CARDS,
+  PASTE,
   PASTE_CARD,
   REMOVE_SELECTED_CARD,
   REORDER_CARDS_BETWEEN_ROWS,
   REORDER_CARDS_WITHIN_ROW,
+  SELECT_CARD,
   SEPARATE_CARD,
   SET_CARD_DATA,
   SET_COPY_CARD_ID,
@@ -17,10 +20,34 @@ import {
 
 const initialState = {
   selectedRowId: "",
+  selectedCardId: "",
   selectedCards: {},
   cards: { ...cards },
   rows: { ...rows },
   copyCardId: "",
+};
+
+const getPastCardData = (state, copyCardId, pasteCardId) => {
+  const copiedCard = state.cards[copyCardId];
+  const pasteCard = {
+    ...state.cards[pasteCardId],
+    hasData: true,
+    title: copiedCard.title,
+    description: copiedCard.description,
+    color: copiedCard.color,
+  };
+  let newSelectedCards = {
+    ...state.selectedCards,
+  };
+  const selectedCardValues = Object.values(state.selectedCards);
+  if (selectedCardValues.includes(pasteCardId)) {
+    newSelectedCards = {};
+  }
+
+  return {
+    pasteCard,
+    newSelectedCards,
+  };
 };
 
 const boardReducer = (state = initialState, action) => {
@@ -255,24 +282,11 @@ const boardReducer = (state = initialState, action) => {
       };
     }
     case PASTE_CARD: {
-      const copiedCard = state.cards[state.copyCardId];
-      const pasteCard = {
-        ...state.cards[payload],
-        hasData: true,
-        title: copiedCard.title,
-        description: copiedCard.description,
-        color: copiedCard.color,
-      };
-
-      let newSelectedCards = {
-        ...state.selectedCards,
-      };
-
-      const selectedCardValues = Object.values(state.selectedCards);
-      if (selectedCardValues.includes(payload)) {
-        newSelectedCards = {};
-      }
-
+      const { newSelectedCards, pasteCard } = getPastCardData(
+        state,
+        state.copyCardId,
+        payload
+      );
       return {
         ...state,
         selectedCards: newSelectedCards,
@@ -326,6 +340,37 @@ const boardReducer = (state = initialState, action) => {
         rows: {},
         copyCardId: "",
       };
+    case SELECT_CARD:
+      return {
+        ...state,
+        selectedCardId: payload,
+      };
+    case COPY: {
+      return {
+        ...state,
+        copyCardId: state.selectedCardId,
+      };
+    }
+    case PASTE: {
+      if (!state.selectedCardId || !state.copyCardId) return state;
+
+      const { newSelectedCards, pasteCard } = getPastCardData(
+        state,
+        state.copyCardId,
+        state.selectedCardId
+      );
+
+      return {
+        ...state,
+        selectedCards: newSelectedCards,
+        selectedCardId: "",
+        cards: {
+          ...state.cards,
+          [state.selectedCardId]: pasteCard,
+        },
+      };
+    }
+
     default:
       return state;
   }

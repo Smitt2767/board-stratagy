@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { keys } from "../../constants";
 import {
   clear,
+  copy,
+  paste,
   reOrderCardsBetweenRows,
   reOrderCardsWithinRow,
 } from "../../store/actions";
+import { getOS } from "../../utils";
 import Row from "./Row";
 
 const Container = styled.div`
@@ -29,6 +33,30 @@ const Board = () => {
   const { rows, cards } = useSelector((state) => state.board);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const keyListener = (e) => {
+      const key = keys[getOS()];
+
+      if (key && e[key]) {
+        if (e.keyCode === 67) {
+          //copy
+          dispatch(copy());
+        }
+        if (e.keyCode === 86) {
+          //paste
+
+          dispatch(paste());
+        }
+      }
+    };
+
+    document.addEventListener("keydown", keyListener);
+
+    return () => {
+      document.removeEventListener("keydown", keyListener);
+    };
+  }, [dispatch]);
 
   const handleDragEnd = (result) => {
     const { draggableId, destination, source } = result;

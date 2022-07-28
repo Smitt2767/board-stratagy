@@ -5,7 +5,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { modes } from "../../constants";
+import { keys, modes } from "../../constants";
 import useContextMenu from "../../hooks/useContextMenu";
 import {
   addSelectedCard,
@@ -15,8 +15,9 @@ import {
   removeSelectedCard,
   separateCard,
   setCopyCardId,
+  setSelectCard,
 } from "../../store/board/actions";
-import { getOS, OS } from "../../utils";
+import { getOS } from "../../utils";
 import ContextMenu from "../common/ContextMenu";
 import AddEditCardModal from "./AddEditCardModal";
 import CardDetailsModal from "./CardDetailsModal";
@@ -34,12 +35,6 @@ const sizes = {
   10: "col-span-10",
   11: "col-span-11",
   12: "col-span-12",
-};
-
-const getKey = {
-  [OS.WINDOWS]: "ctrlKey",
-  [OS.LINUX]: "ctrlKey",
-  [OS.MAC]: "metaKey",
 };
 
 const initialModalState = {
@@ -176,7 +171,7 @@ const Card = ({
   color,
   index,
 }) => {
-  const { selectedCards } = useSelector((state) => state.board);
+  const { selectedCards, selectedCardId } = useSelector((state) => state.board);
   const selectedCardsArr = Object.values(selectedCards);
   const isSelected = selectedCardsArr.includes(id);
   const isFirst = selectedCardsArr[0] === id;
@@ -191,8 +186,8 @@ const Card = ({
   const dispatch = useDispatch();
 
   const contextId = `card_${id.replace(/[-]/g, "_")}`;
-
   const contextMenuData = useContextMenu(contextId);
+  const isCardSelected = selectedCardId === id;
 
   const add = () => {
     dispatch(
@@ -226,7 +221,7 @@ const Card = ({
   };
 
   const handleAddBtnClick = (e) => {
-    const key = getKey[getOS()];
+    const key = keys[getOS()];
 
     if (key && e[key]) {
       if (!selectedCardsArr.length) add();
@@ -241,11 +236,16 @@ const Card = ({
     }
   };
 
-  const handleClick = () => {
-    setCardDetailsModalData({
-      cardId: id,
-      isOpen: true,
-    });
+  const handleClick = (e) => {
+    const key = keys[getOS()];
+
+    if (key && e[key]) {
+      dispatch(setSelectCard(id));
+    } else
+      setCardDetailsModalData({
+        cardId: id,
+        isOpen: true,
+      });
   };
 
   const handleDetailsModalClose = () => {
@@ -289,7 +289,9 @@ const Card = ({
           >
             {hasData ? (
               <CardContainer
-                className="h-full w-full  flex items-center justify-center flex-col rounded-[3px] px-1 overflow-hidden"
+                className={`h-full w-full  flex items-center justify-center flex-col rounded-[3px] px-1 overflow-hidden ${
+                  isCardSelected ? `border-2 border-white` : ""
+                }`}
                 color={color}
                 onClick={handleClick}
                 {...(snapshot.isDragging || snapshot.isDropAnimating
@@ -329,15 +331,6 @@ const Card = ({
                 <AiOutlinePlus />
               </div>
             )}
-
-            {/* {lastSelectedCardId === id && isAllowedToMerge && (
-              <button
-                className={`absolute -right-6 bg-gray-200 hover:bg-white text-black text-lg p-0.5 transition-all duration-500 rounded-sm scale-100 opacity-100`}
-                onClick={handleMergeCards}
-              >
-                <RiMergeCellsHorizontal />
-              </button>
-            )} */}
           </div>
         )}
       </Draggable>
