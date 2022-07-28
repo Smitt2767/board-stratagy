@@ -342,11 +342,7 @@ const boardReducer = (state = initialState, action) => {
     }
     case CLEAR:
       return {
-        selectedRowId: "",
-        selectedCards: {},
-        cards: {},
-        rows: {},
-        copyCardId: "",
+        ...initialState,
       };
     case SELECT_CARD:
       return {
