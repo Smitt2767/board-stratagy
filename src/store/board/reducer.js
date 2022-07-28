@@ -282,6 +282,7 @@ const boardReducer = (state = initialState, action) => {
       };
     }
     case PASTE_CARD: {
+      if (state.copyCardId === payload) return state;
       const { newSelectedCards, pasteCard } = getPastCardData(
         state,
         state.copyCardId,
@@ -364,6 +365,8 @@ const boardReducer = (state = initialState, action) => {
       const selectedCardId = state.selectedCardId
         ? state.selectedCardId
         : selectedCards[0];
+
+      if (state.copyCardId === selectedCardId) return state;
 
       const { newSelectedCards, pasteCard } = getPastCardData(
         state,
