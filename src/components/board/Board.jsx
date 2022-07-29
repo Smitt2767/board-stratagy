@@ -7,6 +7,7 @@ import { keys } from "../../constants";
 import {
   clear,
   copy,
+  deleteCard,
   mergeCards,
   paste,
   reOrderCardsBetweenRows,
@@ -48,10 +49,14 @@ const Board = () => {
           //paste
           dispatch(paste());
         }
-        if (e.keyCode === 32) {
+        if (e.keyCode === 32 || e.keyCode === 8) {
           //paste
           dispatch(mergeCards());
         }
+      }
+
+      if (e.keyCode === 46) {
+        dispatch(deleteCard());
       }
     };
 

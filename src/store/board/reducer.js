@@ -231,15 +231,16 @@ const boardReducer = (state = initialState, action) => {
       };
     }
     case DELETE_CARD: {
-      const { cardId } = payload;
+      const id = payload?.cardId || state.selectedCardId;
+      if (!id) return state;
 
       return {
         ...state,
-        copyCardId: cardId === state.copyCardId ? "" : state.copyCardId,
+        copyCardId: id === state.copyCardId ? "" : state.copyCardId,
         cards: {
           ...state.cards,
-          [cardId]: {
-            ...state.cards[cardId],
+          [id]: {
+            ...state.cards[id],
             title: "",
             description: "",
             color: colors[0],
@@ -248,6 +249,7 @@ const boardReducer = (state = initialState, action) => {
         },
       };
     }
+
     case REORDER_CARDS_WITHIN_ROW: {
       const { rowId, cardIds } = payload;
       return {
