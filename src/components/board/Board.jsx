@@ -49,13 +49,13 @@ const Board = () => {
           //paste
           dispatch(paste());
         }
-        if (e.keyCode === 32 || e.keyCode === 8) {
+        if (e.keyCode === 32) {
           //paste
           dispatch(mergeCards());
         }
       }
 
-      if (e.keyCode === 46) {
+      if (e.keyCode === 46 || e.keyCode === 8) {
         dispatch(deleteCard());
       }
     };
